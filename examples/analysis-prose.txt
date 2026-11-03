@@ -1,0 +1,1 @@
+Die Analyse zeigt 101 SQL-Abfragen pro Request, dokumentiert in trace:run84. Ursache ist das N+1-Problem beim Laden der ORM-Relationen: Jede Zeile lädt die Relation separat. Als Alternativen kommen JOIN und Batch-Fetch infrage. Wir empfehlen, Batch-Fetch zu testen. Die Einschätzung ist mit hoher Sicherheit beurteilt.
