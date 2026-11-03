@@ -56,6 +56,16 @@ python3 -m pip install tiktoken
 
 Byte savings are **not** token savings. Benchmark scores do not prove semantic fidelity; test reconstruction quality independently.
 
+## GitHub output profiles
+
+RelayCode uses `human compact` for GitHub communication:
+
+- `github.issue`: problem, current/expected behavior, reproduction and acceptance criteria.
+- `github.pr`: change, rationale, tests (including failures), risks and breaking changes.
+- `github.review`: precise location, issue, impact and proposed correction.
+
+Never omit failing tests, security concerns or migrations to save tokens. See [SKILL.md](SKILL.md) for examples.
+
 ## Principles
 
 1. Preserve all decision-relevant facts, negations, conditions, units, ownership, uncertainty, and evidence.
@@ -66,7 +76,7 @@ Byte savings are **not** token savings. Benchmark scores do not prove semantic f
 
 ## Status and limitations
 
-RelayCode 2.1 is a prototype. An early example yielded 68.6% byte reduction versus verbose prose—not a validated 90% token reduction. The 90% target remains experimental, especially for repetitive messages with shared context. RC2 syntax validation is implemented; semantic equivalence is not automatically verified. The wire format may change.
+RelayCode 2.2 is a prototype. An early example yielded 68.6% byte reduction versus verbose prose—not a validated 90% token reduction. The 90% target remains experimental, especially for repetitive messages with shared context. RC2 syntax validation is implemented; semantic equivalence is not automatically verified. The wire format may change.
 
 ## License
 
