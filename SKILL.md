@@ -1,9 +1,9 @@
 ---
 name: relaycode
-description: "RelayCode 2.1: tokenarme Agenten- und Nutzerkommunikation. Verwenden für kompakte Aufträge, Probleme, Analysen, Erklärungen, Zusammenfassungen und Übergaben, für RelayCode-Codierung/Decodierung oder für kurze Nutzerantworten in den Modi human compact, ultra und full."
+description: "RelayCode 2.2: tokenarme Agenten- und Nutzerkommunikation. Verwenden für kompakte Aufträge, Probleme, Analysen, Erklärungen, Zusammenfassungen und Übergaben, RelayCode-Codierung/Decodierung, kurze Antworten sowie GitHub-Issues, Pull-Requests und Code-Review-Kommentare."
 ---
 
-# RelayCode 2.1 · RC2
+# RelayCode 2.2 · RC2
 
 Ziel: möglichst wenige **Gesamttokens** (Nachricht + Protokollkontext + Rückfragen) bei vollständiger *relevanter* Bedeutung. Zielwert 90 % Einsparung gegenüber ausführlicher Prosa **nur bei belegten, repetitiven Anwendungsfällen**, keine universelle Garantie. Nicht mit inhaltlicher Vollständigkeit gleichsetzen, dass jeder Wortlaut rekonstruierbar ist. Für exakte Originaltexte diese unverändert referenzieren/übertragen.
 
@@ -34,6 +34,44 @@ Beispiel einer Nutzerantwort in drei Stufen:
 - `full`: „Die Duplikaterkennung übersieht Namen, die gleich aussehen, aber unterschiedlich codiert sind. Normalisiere die Namen vor dem Vergleich nach NFC. Die ursprünglichen Werte dürfen dabei nicht verändert werden.“
 
 Diese Varianten sind sinngleich, **wenn** NFC bereits feststeht; andernfalls muss die Normalisierungsform als Vorschlag gekennzeichnet werden. Bei einer Anforderung nach detaillierter Erklärung keine `ultra`-Antwort ausgeben.
+
+### GitHub-Ausgabeprofile
+
+GitHub-Kommunikation standardmässig als `human compact` ausgeben. Die Profile sind **keine neuen Wire-Typen**; bestehende `@2`-Nachrichten bleiben unverändert. Verwende sie bei Issues, PR-Beschreibungen, PR-Kommentaren und Reviews. Titel im `human ultra`-Stil: konkrete Änderung oder Problem, keine Floskel. Bestehende Repository-Templates und ausdrückliche Nutzeranweisungen haben Vorrang.
+
+| Profil | Pflichtinhalte, soweit bekannt |
+| --- | --- |
+| `github.issue` | Problem/Ziel, Ist- und Sollzustand, reproduzierbare Schritte bei Bugs, Akzeptanzkriterien; relevante Umgebung |
+| `github.pr` | Änderung, Grund, Teststatus inkl. fehlgeschlagener/nicht ausgeführter Tests, Breaking Changes, Risiken und Migrationshinweise |
+| `github.review` | genaue Fundstelle, beobachtbares Problem, Auswirkung, konkrete Korrektur; bei Unsicherheit als Frage formulieren |
+
+Regeln:
+
+1. Kein erfundener Test-, Reproduktions-, Sicherheits- oder Prüfstatus. Unbekannt als `nicht geprüft` kennzeichnen, wenn für die Entscheidung relevant.
+2. Offene Punkte, fehlgeschlagene Tests, Datenverlustgefahr und Breaking Changes nie wegkomprimieren.
+3. Bei Reviews nur belegte Probleme als Fehler behaupten; persönliche Präferenzen als Vorschläge kennzeichnen.
+4. Kein `LGTM` ohne tatsächliche Prüfung. Bei kritischen Sicherheitsproblemen `human full` nutzen.
+5. Formate konsistent halten; leere Abschnitte weglassen, ausser Repository-Vorlagen verlangen sie.
+
+Beispiele:
+
+```text
+Issue: CSV-Import erkennt Unicode-Duplikate nicht
+Ist: Gleich aussehende Namen werden mehrfach importiert.
+Soll: NFC-Varianten als Duplikate erkennen; Rohwerte behalten.
+Akzeptanz: Reproduktionstest grün; keine Bestandsdaten verändert.
+```
+
+```text
+PR: NFC-Vergleich im CSV-Import
+Änderung: Vergleichswerte normalisiert; Originalwerte unverändert.
+Tests: 18/19 erfolgreich; Sonderzeichen-Test offen.
+Risiko: Bestehende Dubletten noch nicht bereinigt.
+```
+
+```text
+Review L42: NFC verändert Originalwert. Nur Vergleichswert normalisieren.
+```
 
 ## Wire-Format
 
