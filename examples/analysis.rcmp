@@ -1,0 +1,8 @@
+@2 A api42
+obs:101 SQL-Abfragen/Request
+e:trace:run84
+cause:N+1 ORM relation loads
+why:jede Zeile lädt Relation separat
+alt:JOIN; Batch-Fetch
+rec:Batch-Fetch testen
+u:hi
