@@ -23,6 +23,15 @@ Or use the [SKILL.md](SKILL.md) directly in your agent's skill directory.
 | `human ultra` | Agent → Human | Maximum brevity without losing constraints |
 | `human full` | Agent → Human | Detailed explanation when needed |
 
+## RelayCode 2.3: Operational safety
+
+- Next steps: `n:<owner> | <action> | <trigger>`; a planned action is not an executed action.
+- `s:` reports **task** status, not whether an agent session is currently running.
+- For PR/Issue results, link the canonical comment through `e:` instead of duplicating the full report.
+- Approval claims require verification against an authoritative, attributable original source.
+- Validate new messages with `python3 scripts/rc2.py validate MESSAGE.txt --strict-next`. Existing `@2` messages remain readable without this option.
+- Heartbeats, agent wake-ups and timeouts belong to the orchestrator, not the language protocol.
+
 ## Example
 
 ```text
