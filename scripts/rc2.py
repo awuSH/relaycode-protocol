@@ -16,7 +16,7 @@ HEADER = re.compile(r"^@2 ([TRQDSP AEMHC]{1}) ([^\s#]+)(?: #([^\s#]+))?$".replac
 FIELD = re.compile(r"^([a-z]+):(.*)$")
 
 
-def parse(message):
+def parse(message, strict_next=False):
     lines = message.strip("\n").splitlines()
     if not lines:
         raise ValueError("empty message")
@@ -41,6 +41,10 @@ def parse(message):
             raise ValueError(f"line {number}: invalid confidence")
         if key == "p" and value not in {"0", "1", "2", "3"}:
             raise ValueError(f"line {number}: invalid priority")
+        if key == "n" and strict_next:
+            parts = [part.strip() for part in value.split("|")]
+            if len(parts) != 3 or any(not part for part in parts):
+                raise ValueError(f"line {number}: n requires owner | action | trigger")
         seen.add(key)
         data["fields"].append({"key": key, "value": value})
     return data
@@ -52,9 +56,10 @@ def main():
     cli.add_argument("message", type=Path, help="RC2 UTF-8 message file")
     cli.add_argument("--baseline", type=Path, help="baseline text file for bench")
     cli.add_argument("--encoding", default="cl100k_base", help="tiktoken encoding if available")
+    cli.add_argument("--strict-next", action="store_true", help="require RelayCode 2.3 next-step syntax")
     args = cli.parse_args()
     source = args.message.read_text(encoding="utf-8")
-    parsed = parse(source)
+    parsed = parse(source, strict_next=args.strict_next)
     if args.action == "validate":
         print("RC2 syntax valid")
     elif args.action == "decode":
